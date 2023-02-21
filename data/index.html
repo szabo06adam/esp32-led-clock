@@ -1,0 +1,234 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Clock settings</title>
+		<script src="script.js"></script>
+		<link rel="stylesheet" href="style.css"/>
+	</head>
+
+	<body onload="init();">
+		<h1>Settings:</h1>
+		<table>
+			<!--time and date-->
+			<tr>
+				<td colspan="3"><h3 align="center">Time and date</h3></td>
+			</tr>
+			<tr>
+				<td>Date and time:</td>
+				<td><input type="datetime-local" id="date" value="%DATETIME%" required/></td>
+				<td><input type="button" onClick="sendDateTime();" value="send"/></td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<input type="checkbox" id="tzbox" onClick="setTimezoneTableHidden()"/>
+					<label for="tzbox">Set timezone information</label>
+				</td>
+			</tr>
+			<tr id="timezonesettings" hidden="true">
+				<td colspan="3">
+					<table name="timezonetable" id="timezonetable">
+						<div>
+							<input type="checkbox" id="dstbox" onClick="setTzrTableHidden()" %DSTBOX%/>
+							<label for="dstbox">Set different standard (STD) and summer (DST) time</label>
+						</div>
+						<tr>
+							<th align="center">STD<br>(standard time)</th>
+							<th align="center">DST<br>(summer time)</th>
+						</tr>
+						<tr>
+							<td colspan="2" align="center">Month of change</td>
+						</tr>
+						<tr>
+							<td class="dst">
+								<select id="tzr1mon" value="%R1MON%">
+									<option value="Jan">January</option>
+									<option value="Feb">February</option>
+									<option value="Mar">March</option>
+									<option value="Apr">April</option>
+									<option value="May">May</option>
+									<option value="Jun">June</option>
+									<option value="Jul">July</option>
+									<option value="Aug">August</option>
+									<option value="Sep">September</option>
+									<option value="Oct">October</option>
+									<option value="Nov">November</option>
+									<option value="Dec">December</option>
+								</select>
+							</td>
+							<td class="std">
+								<select id="tzr2mon" value="%R2MON%">
+									<option value="Jan">January</option>
+									<option value="Feb">February</option>
+									<option value="Mar">March</option>
+									<option value="Apr">April</option>
+									<option value="May">May</option>
+									<option value="Jun">June</option>
+									<option value="Jul">July</option>
+									<option value="Aug">August</option>
+									<option value="Sep">September</option>
+									<option value="Oct">October</option>
+									<option value="Nov">November</option>
+									<option value="Dec">December</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" align="center">Week of change<br>(relative in month)</td>
+						</tr>
+						<tr>
+							<td class="dst">
+								<select id="tzr1week" value="%R1WEEK%">
+									<option value="First">First</option>
+									<option value="Second">Second</option>
+									<option value="Third">Third</option>
+									<option value="Fourth">Fourth</option>
+									<option value="Last">Last</option>
+								</select>
+							</td>
+							<td class="std">
+								<select id="tzr2week" value="%R2WEEK%">
+									<option value="First">First</option>
+									<option value="Second">Second</option>
+									<option value="Third">Third</option>
+									<option value="Fourth">Fourth</option>
+									<option value="Last">Last</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" align="center">Day of change</td>
+						</tr>
+						<tr>
+							<td class="dst">
+								<select id="tzr1dow" value="%R1DOW%">
+									<option value="Mon">Monday</option>
+									<option value="Tue">Tuesday</option>
+									<option value="Wed">Wednesday</option>
+									<option value="Thu">Thursday</option>
+									<option value="Fri">Friday</option>
+									<option value="Sat">Saturday</option>
+									<option value="Sun">Sunday</option>
+								</select>
+							</td>
+							<td class="std">
+								<select id="tzr2dow" value="%R2DOW%">
+									<option value="Mon">Monday</option>
+									<option value="Tue">Tuesday</option>
+									<option value="Wed">Wednesday</option>
+									<option value="Thu">Thursday</option>
+									<option value="Fri">Friday</option>
+									<option value="Sat">Saturday</option>
+									<option value="Sun">Sunday</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" align="center">Hour of change</td>
+						</tr>
+						<tr>
+							<td class="dst"><input type="number" id="tzr1h" min="0" max="23" step="1" value="%R1H%"/></td>
+							<td class="std"><input type="number" id="tzr2h" min="0" max="23" step="1" value="%R2H%"/></td>
+						</tr>
+						<tr>
+							<td colspan="2" align="center">Offset from UTC<br>(minutes)</td>
+						</tr>
+						<tr id="offs_tr">
+							<td class="dst" id="dst_offs"><input type="number" id="tzr1offs" step="1" value="%R1OFFS%"/></td>
+							<td class="std" id="std_offs"><input type="number" id="tzr2offs" step="1" value="%R2OFFS%"/></td>
+						</tr>
+						<tr id="tzsendbtntr">
+							<td colspan="2" align="center"><input type="button" value="send" onClick="sendTimeZone()"</td>
+						</tr>
+					</table>
+					<table id="utc_table">
+						<tr id="utc_offs_tr">
+							<td>Offset from UTC (minutes):</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<!--WiFi-->
+			<tr>
+				<td colspan="3"><h3 align="center">Network</h3><td>
+			</tr>
+			<tr>
+				<td>WiFi SSID:</td>
+				<td><input type="text" id="wifissid" placeholder="wifi ssid" value="%WIFISSID%" required/></td>
+				<td rowspan="2"><input type="button" onClick="sendWifi();" value="send both"/></td>
+			</tr>
+			<tr>
+				<td>WiFi password:</td>
+				<td><input type="password" id="wifipass" placeholder="wifi password" value="%WIFIPASS%" required/></td>
+			</tr>
+			<tr>
+				<td colspan="3"><br></td>
+			</tr>
+			<!--NTP-->
+			<tr>
+				<td>
+					<label for="ntpbox">NTP server:</label>
+					<input type="checkbox" id="ntpbox" onClick="setNTPManuHidden();" %NTPBOX%/>
+				</td>
+				<td><input type="text" id="ntpserv" placeholder="NTP server address" value="%NTPSERV%" required/></td>
+				<td><input type="button" onClick="sendNTP();" value="send"/></td>
+			</tr>
+			<!--colours-->
+			<tr>
+				<td colspan="3"><h3 align="center">Colours</h3><td>
+			</tr>
+			<tr>
+				<td>Hour colour:</td>
+				<td><input type="color" id="Hcolor" value="%HCOLOR%" required/></td>
+				<td><input type="button" onClick="sendHclr();" value="send"/></td>
+			</tr>
+			<tr>
+				<td>Minute colour:</td>
+				<td><input type="color" id="Mcolor" value="%MCOLOR%" required/></td>
+				<td><input type="button" onClick="sendMclr();" value="send"/></td>
+			</tr>
+			<tr>
+				<td>Second colour:</td>
+				<td><input type="color" id="Scolor" value="%SCOLOR%" required/></td>
+				<td><input type="button" onClick="sendSclr();" value="send"/></td>
+			</tr>
+			<tr>
+				<td>Background colour:</td>
+				<td><input type="color" id="Bgcolor" value="%BGCOLOR%" required/></td>
+				<td><input type="button" onClick="sendBgclr();" value="send"/></td>
+			</tr>
+			<!--brightness-->
+			<tr>
+				<td colspan="3"><h3 align="center">Brightness</h3><td>
+			</tr>
+			<tr>
+				<td>Minimum brightness:</td>
+				<td><input type="number" min="1" max="4095" step="1" id="minBrightness" placeholder="minimum brightness" value="%MINBRIGHT%" required/></td>
+				<td><input type="button" onClick="sendMinBrightness();" value="send"/></td>
+			</tr>
+			<tr>
+				<td>Maximum brightness:</td>
+				<td><input type="number" min="1" max="4095" step="1" id="maxBrightness" placeholder="maximum brightness" value="%MAXBRIGHT%" required/></td>
+				<td><input type="button" onClick="sendMaxBrightness();" value="send"/></td>
+			</tr>
+			<tr>
+				<td>
+					<label for="brbox">Manual brightness:</label>
+					<input type="checkbox" id="brbox" onClick="setBrManuHidden();" %BRBOX%/>
+				</td>
+				<td class="manu_bright">
+					<input type="number" min="1" max="255" step="1" id="manuBrightness" placeholder="manual brightness" value="%MANUBRIGHT%"/>
+				</td>
+				<td class="manu_bright">
+					<input type="button" onClick="sendManuBrightness();" value="send"/>
+				</td>
+
+			</tr>
+			<!--send everything-->
+			<tr><td colspan="3"><br></td></tr>
+			<tr>
+				<td colspan="2"><div>Send everything at once</div></td>
+				<td><input type="button" onClick="sendAll();" value="Send all"/></td>
+			</tr>
+		</table>
+	</body>
+</html>
